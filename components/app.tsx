@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { Welcome } from '@/components/welcome';
 import useConnectionDetails from '@/hooks/useConnectionDetails';
 import type { AppConfig } from '@/lib/types';
+import { useSession } from "next-auth/react"
 
 const MotionWelcome = motion.create(Welcome);
 const MotionSessionView = motion.create(SessionView);
@@ -19,6 +20,7 @@ interface AppProps {
 }
 
 export function App({ appConfig }: AppProps) {
+  const { data: session, status } = useSession()
   const room = useMemo(() => new Room(), []);
   const [sessionStarted, setSessionStarted] = useState(false);
   const { refreshConnectionDetails, existingOrRefreshConnectionDetails } =
@@ -92,7 +94,6 @@ export function App({ appConfig }: AppProps) {
       <RoomContext.Provider value={room}>
         <RoomAudioRenderer />
         <StartAudio label="Start Audio" />
-        {/* --- */}
         <MotionSessionView
           key="session-view"
           appConfig={appConfig}
