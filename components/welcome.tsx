@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut, signIn } from 'next-auth/react';
 interface WelcomeProps {
   disabled: boolean;
   startButtonText: string;
@@ -38,13 +38,38 @@ export const Welcome = ({
         />
       </svg>
 
-      <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
-        Hey {user?.name}, speak with your email & calendar!
-      </p>
-      <Button variant="primary" size="lg" onClick={onStartCall} className="mt-6 w-64 font-mono">
-        {startButtonText}
-      </Button>
-
+      {user ? (
+        <>
+          <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
+            Meet Alexis. The simplest way to command your email and calendar.
+          </p>
+          <Button variant="primary" size="lg" onClick={onStartCall} className="mt-6 w-64 font-mono">
+            {startButtonText}
+          </Button>
+          <Button
+            variant="destructive"
+            size="lg"
+            onClick={() => signOut({ callbackUrl: '/' })}
+            className="mt-4 w-64 font-mono hover:bg-destructive/90"
+          >
+            Logout
+          </Button>
+        </>
+      ) : (
+        <>
+          <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
+            Meet Alexis. The simplest way to command your email and calendar.
+          </p>
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={() => signIn('google', { callbackUrl: '/' })}
+            className="mt-6 w-64 font-mono"
+          >
+            Log in with Google
+          </Button>
+        </>
+      )}
     </section>
   );
 };
