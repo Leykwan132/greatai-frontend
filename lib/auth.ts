@@ -6,6 +6,8 @@ declare module 'next-auth' {
     interface Session extends DefaultSession {
         user: {
             id: string;
+            accessToken?: string;
+            refreshToken?: string;
         } & DefaultSession['user'];
     }
 }
@@ -19,6 +21,8 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async session({ token, session }) {
+
+            console.log("token", token);
             if (token) {
                 session.user.id = token.id as string
                 session.user.name = token.name as string

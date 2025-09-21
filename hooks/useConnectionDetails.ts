@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { decodeJwt } from 'jose';
 import { ConnectionDetails } from '@/app/api/connection-details/route';
 import { AppConfig } from '@/lib/types';
+import { useSession, signOut, signIn } from 'next-auth/react';
+
 
 const ONE_MINUTE_IN_MILLISECONDS = 60 * 1000;
 
@@ -16,6 +18,7 @@ export default function useConnectionDetails(appConfig: AppConfig) {
   // own participant name, and possibly to choose from existing rooms to join.
 
   const [connectionDetails, setConnectionDetails] = useState<ConnectionDetails | null>(null);
+  const { data: session, status } = useSession()
 
   const fetchConnectionDetails = useCallback(async () => {
     setConnectionDetails(null);
@@ -35,9 +38,10 @@ export default function useConnectionDetails(appConfig: AppConfig) {
         body: JSON.stringify({
           room_config: appConfig.agentName
             ? {
-                agents: [{ agent_name: appConfig.agentName }],
-              }
+              agents: [{ agent_name: appConfig.agentName }],
+            }
             : undefined,
+          session_token: session?.user?.accessToken ?? '', // Include the session token in the request
         }),
       });
       data = await res.json();

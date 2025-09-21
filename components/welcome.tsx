@@ -1,27 +1,33 @@
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { useSession, signOut, signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
 interface WelcomeProps {
   disabled: boolean;
   startButtonText: string;
   onStartCall: () => void;
 }
 
+
+
 export const Welcome = ({
   disabled,
   startButtonText,
   onStartCall,
   ref,
-}: React.ComponentProps<'div'> & WelcomeProps) => {
-  const { data: session, status } = useSession()
-  const user = session?.user
+}: React.ComponentProps<"div"> & WelcomeProps) => {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+
+
   return (
     <section
       ref={ref}
       inert={disabled}
       className={cn(
-        'bg-background fixed inset-0 mx-auto flex h-svh flex-col items-center justify-center text-center',
-        disabled ? 'z-10' : 'z-20'
+        "bg-background fixed inset-0 mx-auto flex h-svh flex-col items-center justify-center text-center",
+        disabled ? "z-10" : "z-20"
       )}
     >
       <svg
@@ -43,14 +49,22 @@ export const Welcome = ({
           <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
             Meet Alexis. The simplest way to command your email and calendar.
           </p>
-          <Button variant="primary" size="lg" onClick={onStartCall} className="mt-6 w-64 font-mono">
+
+          <Button
+            variant="primary"
+            size="lg"
+            onClick={onStartCall}
+            className="mt-6 w-64 font-mono"
+          >
             {startButtonText}
           </Button>
+
+
           <Button
             variant="destructive"
             size="lg"
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="mt-4 w-64 font-mono hover:bg-destructive/90"
+            onClick={() => signOut({ callbackUrl: "/" })}
+            className="hover:bg-destructive/90 mt-4 w-64 font-mono"
           >
             Logout
           </Button>
@@ -63,7 +77,7 @@ export const Welcome = ({
           <Button
             variant="primary"
             size="lg"
-            onClick={() => signIn('google', { callbackUrl: '/' })}
+            onClick={() => signIn("google", { callbackUrl: "/" })}
             className="mt-6 w-64 font-mono"
           >
             Log in with Google
