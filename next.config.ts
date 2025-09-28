@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
     // !! WARN !!
     ignoreBuildErrors: true,
   },
+  output: 'standalone', // needed so Amplify can run API + SSR properly
+  reactStrictMode: true,
 };
 
 export default nextConfig;
